@@ -29,14 +29,18 @@ if (file) {
     console.log(`${opening} is now being watched for changes.`);
 }
 
+/*
+ | Watch for file changes, push 'em through the pipe
+*/
 file.on('change', function (path) {
     console.log(`${path} has been edited`);
     
-    if (!push(opening, tailEnd)) {
-        console.log('Could not update tail end of the pipe.');
-    } else {
-        console.log('Destination file has been updated');
-    }
+    push(opening, tailEnd, function(err) {
+        if (!err) {
+            return console.log('Destination file has been updated');
+        }
+        console.error('Could not update tail end of the pipe.');
+    });
 });
 
 /**
@@ -44,19 +48,22 @@ file.on('change', function (path) {
  * 
  * @param string source 
  * @param string destination 
+ * @param function callback
  * 
  * @return boolean
  */
-function push(source, destination) {
+function push(source, destination, callback) {
     console.log([source, destination]);
-    let srcStream = fs.readFileSync(source, {encoding: 'utf-8'});
 
-    if (!srcStream) {
-        console.log(srcStream);
-        return false;
-    }
-
-    fs.writeFileSync(destination, srcStream, {encoding: 'utf-8'});
-    delete srcStream;
-    return true;
+    fs.readFile(source, function(err, buffer) {
+        if (err) {
+            return callback(err)
+        }
+        fs.writeFile(destination, buffer, function(err) {
+            if (err) {
+                return callback(err);
+            }
+        });
+    });
+    callback(false); // no errors
 }
