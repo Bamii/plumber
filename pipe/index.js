@@ -1,5 +1,14 @@
+/*
+ * Options:
+ * 1) Daemonize a much simpler version of the script.
+ * 2) Retry write if buffer is empty when it shouldn't be.
+ * 3) Put all functions into one function object
+ * 4) Combine the current with retries...?
+ */
+
 const fs = require('fs');
 const watcher = require('chokidar');
+const os = require('os');
 
 /*
  | Get file paths
@@ -22,88 +31,54 @@ if (!fs.existsSync(tailEnd)) {
     process.exit(0); // @todo: appropriate exit code
 }
 
-var file = watcher.watch(opening, {persistent: true});
-
-if (file) {
-    console.log(`${opening} is now being watched for changes.`);
-}
+/*
+ | Shall we?
+*/
+var fileWatcher;
+watchFile(opening);
 
 /*
- | Watch for file changes, push 'em through the pipe
+ | Start watch, register callbacks.
 */
-file.on('change', function (path) {
-    console.log(`${path} has been edited`);
-    
-    push(opening, tailEnd, function(err) {
-        if (!err) {
-            return console.log('Destination file has been updated');
-        }
-        console.error('Could not update tail end of the pipe.');
+function watchFile(opening) {
+    fileWatcher = watcher.watch(opening, {persistent: true})
+        .on('change', onFileChange)
+        .on('ready', function () {console.log(`${opening} is now being watched for changes.`)});
+}
+
+
+function onFileChange(path) {
+    console.log(`${path} has been edited.`);
+
+    readFromFile(path)
+    .catch(function() {console.log('Could not read from file.')})
+    .then(function (buffer) { return writeToFile(buffer, tailEnd) })
+    .catch(function() {console.log('Could not update destination file.')})
+    .then(watchFile(path));
+}
+
+
+function readFromFile(file) {
+    fileWatcher.close()
+    return new Promise(function (resolve, reject) {
+        let buffer = fs.readFileSync(file);
+        return (buffer) ? resolve(buffer) : reject();
     });
-});
+}
 
-/**
- * Tries to push contents of one file to another.
- * 
- * @param string source 
- * @param string destination 
- * @param function callback
- * 
- * @return boolean
- */
-function push(source, destination, callback) {
-    console.log([source, destination]);
 
-    fs.readFile(source, function(err, buffer) {
-        if (err) {
-            return callback(err)
-        }
-        fs.writeFile(destination, buffer, function(err) {
-            if (err) {
-                return callback(err);
-            }
+function writeToFile(buffer, file) {
+    return new Promise(function (resolve, reject) {
+        var error = false;
+        
+        var writeStream = fs.createWriteStream(file);
+        writeStream.on('error', (fd) => {error = true});
+        writeStream.on('finish', () => {
+            console.log(`Destination file may have been updated with (${buffer.length}) ` + os.EOL + buffer.toString());
         });
+        writeStream.write(buffer);
+        writeStream.end();
+
+        return (error) ? reject('Could not write to destination file') : resolve();
     });
-    callback(false); // no errors
-}
-
-function callerFunction() {
-
-}
-
-function watcherFunction() {
-    // starts the watch, non-persistently
-    let updateSuccessful = false;
-    let file = watcher.watch(opening, {persistent: false});
-
-    file.on('ready', path => { console.log(`${path} is now being watched for changes`) })
-        .on('change',path => {
-            console.log(`${path} has been edited`);
-            if (!pushSync(opening, tailEnd)) {
-                console.log('Could not update tail end of the pipe.');
-            } else {
-                console.log('Destination file has been updated');
-                restarterFunction();
-            }
-        });
-    
-    return updateSuccessful;
-}
-
-function restarterFunction() {
-    // calls the caller to start the watch if a condition is met
-}
-
-function pushSync(source, destination) {
-    console.log([source, destination]);
-    let srcStream = fs.readFileSync(source, {encoding: 'utf-8'});
-
-    if (!srcStream) {
-        console.log(srcStream);
-        return false;
-    }
-
-    fs.writeFileSync(destination, srcStream, {encoding: 'utf-8'});
-    delete srcStream;
-    return true;
 }

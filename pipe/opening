@@ -1,6 +1,15 @@
-kkfkefkekfe
-ffkfkfkfkf
-kfkfkkfkfkfkfkkfkfkfkfkf
-kskskskkkkkkkkkkkkk
-kkskskkks
-999999999999999999
+<?php
+
+namespace Cyclos;
+
+use Illuminate\Contracts\Files;
+
+class FileHandle extends Files 
+{
+    public function doSomething()
+    {
+        if ($this->request->isAllScrewedUp()) {
+            return response()->(['msg' => "Sorry bro, nothing to see here."]);
+        }
+    }
+}
