@@ -1,20 +1,20 @@
 {
   "name": "the-plumber",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node application to make sure two files always have the same content.",
   "author": "Ope Adeyomoye <victoradeyomoye@yahoo.co.uk>",
   "license": "MIT",
   "private": false,
   "bugs": {
-      "url": "https://github.com/opeadeyomoye/plumber/issues"
+    "url": "https://github.com/opeadeyomoye/plumber/issues"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/opeadeyomoye/plumber.git"
+    "type": "git",
+    "url": "https://github.com/opeadeyomoye/plumber.git"
   },
   "main": "./lib/plumber.js",
   "bin": {
-      "plumber": "./bin/plumber"
+    "plumber": "./bin/plumber"
   },
   "dependencies": {
     "chokidar": "^1.6.1",
