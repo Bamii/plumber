@@ -1,30 +1,28 @@
 {
-  "name": "piper",
+  "name": "the-plumber",
   "version": "1.0.0",
-  "description": "Node application to make sure two files always have the same content(s)",
+  "description": "Node application to make sure two files always have the same content.",
   "author": "Ope Adeyomoye <victoradeyomoye@yahoo.co.uk>",
+  "license": "MIT",
   "private": false,
-  "scripts": {
-    "dev": "node build/dev-server.js",
-    "start": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+  "bugs": {
+      "url": "https://github.com/opeadeyomoye/plumber/issues"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/opeadeyomoye/plumber.git"
+  },
+  "main": "./lib/plumber.js",
+  "bin": {
+      "plumber": "./bin/plumber"
   },
   "dependencies": {
-    "daemon": ">=1.0.0",
-    "chokidar": ">1.6.1"
+    "chokidar": "^1.6.1",
+    "daemon": "^1.1.0"
   },
   "devDependencies": {},
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  }
 }
