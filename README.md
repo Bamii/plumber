@@ -7,7 +7,7 @@ Plumber runs on Node.js. Please [install Node](https://nodejs.org/en/download/) 
 
 Then, in your terminal:
 ```bash
-npm install the-plumber
+npm install the-plumber -g
 ```
 
 ## Usage
