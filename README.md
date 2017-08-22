@@ -54,7 +54,8 @@ Thank you for using Plumber!
 ```
 
 ## Credits
-* Plumber uses [daemon.node](https://github.com/indexzero/daemon.node) by [indexzero](https://github.com/indexzero).
+* Plumber uses [daemon.node](https://github.com/indexzero/daemon.node) by [indexzero](https://github.com/indexzero) and co.
+* Also uses [chokidar](https://github.com/paulmillr/chokidar) by [paulmillr](https://github.com/paulmillr) and co.
 
 ## Contributing
 Open an issue or create a PR if you:
