@@ -61,8 +61,10 @@ Thank you for using Plumber!
 Open an issue or create a PR if you:
 * found a bug,
 * made some improvements,
-* really wanted to do a thumbs-down but can't 'cause GitHub hasn't added the button yet,
 * need to teach some of these young developers the real history of Javascript.
 
 ## License
-The MIT License (MIT). See [LICENSE](https://github.com/opeadeyomoye/plumber/blob/master/LICENSE) file for more details.
+
+Released under [The MIT License](http://opensource.org/licenses/MIT). See [LICENSE](https://github.com/opeadeyomoye/plumber/blob/master/LICENSE) file for more details.
+
+Copyright (c) 2017-present, Ope Adeyomoye.
