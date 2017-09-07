@@ -18,9 +18,15 @@
   },
   "dependencies": {
     "chokidar": "^1.6.1",
-    "daemon": "^1.1.0"
+    "daemon": "^1.1.0",
+    "es6-promise": "^4.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/chokidar": "^1.7.2",
+    "@types/forever-monitor": "^1.7.2",
+    "@types/node": "^8.0.25",
+    "typescript": "^2.4.2"
+  },
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">= 3.0.0"
